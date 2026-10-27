@@ -1,0 +1,10 @@
+{
+  "name": "Aua",
+  "short_name": "Aua",
+  "description": "Skin care for cold days",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EEEDF3",
+  "theme_color": "#3E3770",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

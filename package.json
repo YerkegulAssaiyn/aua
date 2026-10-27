@@ -1,0 +1,12 @@
+{
+  "name": "aua",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Aua: skin care for cold days. YouCam API Skin AI & eCommerce VTO Hackathon.",
+  "scripts": {
+    "dev": "node tools/dev-server.mjs",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=18" }
+}

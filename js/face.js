@@ -53,7 +53,10 @@ function labelsSVG(l) {
   const lines = `<g stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round">
     <path d="M220 112 L300 70"/><circle cx="220" cy="112" r="4" fill="#fff"/>
     <path d="M183 198 L102 250"/><circle cx="183" cy="198" r="4" fill="#fff"/></g>`;
-  return lines + box(244, 22, 186, l.dry[0], l.dry[1], "#7FD3F5") + box(-10, 244, 170, l.red[0], l.red[1], "#E2405F");
+  // size each box to its text (Onest ~0.56em per glyph) so longer RU/KK hints never spill out
+  const fit = (t1, t2) => Math.ceil(Math.max(170, String(t1).length * 9.4 + 40, String(t2).length * 7.4 + 30));
+  const wd = Math.min(fit(l.dry[0], l.dry[1]), 240), wr = Math.min(fit(l.red[0], l.red[1]), 250);
+  return lines + box(430 - wd, 22, wd, l.dry[0], l.dry[1], "#7FD3F5") + box(-10, 244, wr, l.red[0], l.red[1], "#E2405F");
 }
 
 function darken(hex) {

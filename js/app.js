@@ -235,7 +235,7 @@ const screens = {
     return page(`<div class="hello"><div><small>${t("eve_card")}, ${eve.time}</small><h2>${t("eve_title")}</h2></div></div>
       <div class="evc">
         <div class="ec"><div class="ef2">${miniFace(morning, p, false)}</div><b>${num(morning.scores.moisture)}</b><span>${t("morning", { time: morning.time })}</span></div>
-        <div class="ed">${c.delta > 0 ? "+" : c.delta < 0 ? "−" : ""}${Math.abs(c.delta)}</div>
+        <div class="ed">${c.delta > 0 ? "+" : c.delta < 0 ? "−" : "±"}${Math.abs(c.delta)}</div>
         <div class="ec"><div class="ef2 b">${miniFace(eve, p, true)}</div><b class="${c.delta < 0 ? "lo" : ""}">${num(eve.scores.moisture)}</b><span>${t("evening", { time: eve.time })}</span></div>
       </div>
       <div class="panel" style="margin-top:12px"><h3>${t("real_t")}</h3><p class="muted" style="margin-top:6px">${t(c.real ? "real_yes" : "real_no", { d: Math.abs(c.delta) })}</p></div>

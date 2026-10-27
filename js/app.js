@@ -9,7 +9,7 @@ const KEY = "aua.v1";
 const today = () => new Date().toISOString().slice(0, 10);
 const defaults = () => ({ lang: "en", onboarded: false, profile: { heating: "central", humidifier: "some", hygrometer: 22, hasHygro: true }, demo: null, day: null, history: [] });
 let S = load();
-const session = { weather: null, weatherSample: false, live: false, photo: null, masks: {}, mapLayer: "moisture", hairShots: [], deleteArmed: false };
+const session = { weather: null, weatherSample: false, live: false, photo: null, base: null, masks: {}, mapLayer: "moisture", hairShots: [], deleteArmed: false };
 
 function load() {
   try { return { ...defaults(), ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch { return defaults(); }
@@ -322,7 +322,7 @@ function mapBlock(scan, p) {
   if (scan && !scan.demo && session.photo) {
     const layers = Object.keys(session.masks);
     const mask = session.masks[session.mapLayer]?.[0];
-    return `<div class="photo-map"><span class="maptag"><i></i>${t("m_" + session.mapLayer)}</span><img src="${session.photo}" alt="">
+    return `<div class="photo-map"><span class="maptag"><i></i>${t("m_" + session.mapLayer)}</span><img src="${esc(session.base || session.photo)}" alt="">
       ${mask ? `<img class="mask" src="${esc(mask)}" alt="">` : ""}</div>
       ${layers.length ? `<div class="mapbtns">${layers.map((k) => `<button data-layer="${k}" class="${k === session.mapLayer ? "on" : ""}">${t("m_" + k)}</button>`).join("")}</div>` : ""}`;
   }
@@ -462,7 +462,7 @@ async function handleShot(dataUrl) {
     try {
       const { file_id } = await api("/api/upload", { image: dataUrl });
       const r = await runTask("skin-analysis", [file_id]);
-      session.photo = dataUrl; session.masks = r.masks || {};
+      session.photo = dataUrl; session.base = r.base || null; session.masks = r.masks || {};
       session.mapLayer = session.masks.moisture ? "moisture" : Object.keys(session.masks)[0] || "moisture";
       const d = day(), w = session.weather || FALLBACK_WEATHER;
       const rec = { time: timeNow(), scores: r.scores, frizz: d.morning?.frizz ?? null };
@@ -554,7 +554,7 @@ document.addEventListener("click", (e) => {
     case "delete":
       if (!session.deleteArmed) { session.deleteArmed = true; render(current); setTimeout(() => { session.deleteArmed = false; }, 5000); return; }
       try { localStorage.removeItem(KEY); localStorage.removeItem("aua.weather"); } catch {}
-      S = defaults(); t = makeT(S.lang); session.photo = null; session.masks = {}; session.deleteArmed = false;
+      S = defaults(); t = makeT(S.lang); session.photo = null; session.base = null; session.masks = {}; session.deleteArmed = false;
       toast(t("deleted")); return go("welcome");
   }
 });

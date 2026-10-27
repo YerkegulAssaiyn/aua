@@ -55,7 +55,9 @@ test("normalize skin + hair results and errors", () => {
   const skin = yc.normalize("skin-analysis", { data: { task_status: "success", results: { output: [
     { type: "moisture", ui_score: 41, raw_score: 38.2, mask_urls: ["https://m/1.png"] },
     { type: "redness", ui_score: 63, raw_score: 60.1, mask_urls: [] },
+    { type: "resize_image", mask_urls: ["https://m/base.jpg"] },
   ] } } });
+  assert.equal(skin.base, "https://m/base.jpg");
   assert.deepEqual(skin.scores, { moisture: 41, redness: 63 });
   assert.deepEqual(skin.masks, { moisture: ["https://m/1.png"] });
   const hair = yc.normalize("hair-frizziness-detection", { data: { task_status: "success", results: { hair_frizziness: { mapping: 2, term: "Frizzy" } } } });

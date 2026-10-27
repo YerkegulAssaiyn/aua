@@ -143,7 +143,7 @@ input[type=range]{width:100%;accent-color:var(--alert);margin-top:6px}
 .smap{background:var(--accs);border-radius:28px;padding:10px 0 0;overflow:hidden;position:relative}
 .photo-map{position:relative;border-radius:28px;overflow:hidden;background:#000}
 .photo-map img{display:block;width:100%}
-.photo-map img.mask{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;mix-blend-mode:normal}
+.photo-map img.mask{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
 .maptag{position:absolute;left:12px;top:12px;background:var(--card);font-size:12px;font-weight:600;padding:6px 10px;border-radius:99px;display:flex;align-items:center;gap:6px;z-index:2}
 .maptag i{width:8px;height:8px;border-radius:50%;background:var(--good)}
 .mapbtns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}

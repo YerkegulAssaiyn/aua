@@ -103,6 +103,11 @@ export function normalize(feature, json) {
       out.masks = {};
       for (const o of list) {
         if (!o?.type) continue;
+        // YouCam also returns the resized source image the masks are aligned to; use it as the map base.
+        if (!SKIN_ACTIONS.includes(o.type)) {
+          if (/resize/.test(o.type) && o.mask_urls?.[0]) out.base = o.mask_urls[0];
+          continue;
+        }
         out.scores[o.type] = o.ui_score ?? null;
         if (Array.isArray(o.mask_urls) && o.mask_urls.length) out.masks[o.type] = o.mask_urls;
       }

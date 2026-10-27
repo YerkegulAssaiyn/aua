@@ -53,11 +53,11 @@ function snow(n = 40, seed = 7, W = 180, H = 300) {
   return `<svg class="snow" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">${out}</svg>`;
 }
 
-function toast(msg) {
+function toast(msg, ms = 2200) {
   const el = document.createElement("div");
   el.className = "toast"; el.textContent = msg; el.setAttribute("role", "status");
   document.body.appendChild(el);
-  setTimeout(() => el.remove(), 2200);
+  setTimeout(() => el.remove(), ms);
 }
 
 async function api(path, body) {
@@ -438,7 +438,9 @@ function busy(text) {
   return () => el.remove();
 }
 const ERR = { error_lighting_dark: "err_dark", error_src_face_too_small: "err_small", error_src_face_out_of_bound: "err_bound", error_no_face: "err_noface", error_pose: "err_pose", no_key: "err_nokey" };
-const errText = (code) => t(ERR[code] || "err_generic");
+// Known YouCam codes get a friendly hint; anything else shows its code so it can be diagnosed.
+const errText = (e) => (ERR[e.code] ? t(ERR[e.code]) : `${t("err_generic")} (${e.code || "error"}${e.message && e.message !== "Request failed" ? ": " + String(e.message).slice(0, 120) : ""})`);
+const errToast = (e) => toast(errText(e), ERR[e.code] ? 3500 : 9000);
 
 async function runTask(feature, fileIds) {
   const { task_id } = await api("/api/task", { feature, file_ids: fileIds });
@@ -469,7 +471,7 @@ async function handleShot(dataUrl) {
       S.history = S.history.filter((x) => x.date !== d.date).concat({ date: d.date, moisture: r.scores.moisture ?? null, tmin: w.days[0]?.tmin ?? w.now.temp, humidifierNight: d.prevHumidifier });
       save(); done();
       cam.step = "front"; session.hairShots = []; render("camera");
-    } catch (e) { done(); toast(errText(e.code)); render("camera"); }
+    } catch (e) { done(); errToast(e); render("camera"); }
     return;
   }
   session.hairShots.push(dataUrl);
@@ -483,7 +485,7 @@ async function handleShot(dataUrl) {
     const r = await runTask("hair-frizziness-detection", ids); // order: front, right, left
     const d = day(); if (d.morning) d.morning.frizz = r.frizz; save();
     done(); go("skin");
-  } catch (e) { done(); toast(errText(e.code)); go("skin"); }
+  } catch (e) { done(); errToast(e); go("skin"); }
 }
 
 /* ---------------- calendar reminders (.ics) ---------------- */

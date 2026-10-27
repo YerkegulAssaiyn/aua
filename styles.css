@@ -220,4 +220,4 @@ input[type=range]{width:100%;accent-color:var(--alert);margin-top:6px}
 .mrow p{font-size:15px;font-weight:500}.mrow span{font-size:14px;color:var(--ink3);text-align:right}
 .madeby{display:flex;gap:12px;align-items:center;margin:16px 4px 0}
 .madeby p{font-size:12.5px;line-height:1.5;color:var(--ink3)}
-.toast{position:fixed;left:50%;bottom:calc(100px + var(--safe-b));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:30}
+.toast{position:fixed;left:50%;max-width:min(420px,calc(100vw - 32px));width:max-content;text-align:center;line-height:1.35;bottom:calc(100px + var(--safe-b));transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:14px;font-size:14px;font-weight:600;z-index:30}

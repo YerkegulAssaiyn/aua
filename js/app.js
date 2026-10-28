@@ -273,6 +273,7 @@ const screens = {
     return page(`<div class="hello"><div><small>${t("not_medical")}</small><h2>${t("doc_title")}</h2></div></div>
       <p class="insight" style="margin-top:0">${t("doc_lead")}</p>
       <div class="panel signs">${[1, 2, 3, 4, 5].map((i) => `<div class="sign"><i></i><p>${t("sign" + i)}</p></div>`).join("")}</div>
+      <p class="muted" style="font-size:12px;margin:8px 4px 0">${t("doc_src")}</p>
       <div class="panel" style="margin-top:10px;background:var(--alerts)"><h3 style="color:var(--alert)">${t("doc_notice")}</h3><p class="muted" style="margin-top:6px">${t("doc_notice_t")}</p></div>
       <a class="cta ghost" style="text-decoration:none" href="https://2gis.kz/astana/search/%D0%B4%D0%B5%D1%80%D0%BC%D0%B0%D1%82%D0%BE%D0%BB%D0%BE%D0%B3" target="_blank" rel="noopener">${t("doc_find")}</a>`, "me");
   },

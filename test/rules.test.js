@@ -34,8 +34,8 @@ test("routine: every step has a because", () => {
     home: 18, scores: { moisture: 41, redness: 63 }, frizz: 2,
   });
   const ids = rt.before.map((s) => s.id);
-  assert.deepEqual(ids, ["lukewarm", "barrier", "lips_scarf", "leave_in"]);
-  assert.deepEqual(rt.evening.map((s) => s.id), ["no_acids", "rich_cream", "humidifier"]);
+  assert.deepEqual(ids, ["lukewarm", "barrier", "lips_scarf", "spf", "leave_in"]);
+  assert.deepEqual(rt.evening.map((s) => s.id), ["no_acids", "rich_cream", "humidifier", "hair_heat"]);
   [...rt.before, ...rt.evening].forEach((s) => assert.ok(s.because && s.because.key));
   assert.ok(neededTags(rt).includes("barrier"));
 });
@@ -44,6 +44,17 @@ test("routine on a mild day still gives one step", () => {
   const rt = routine({ now: { temp: 5, feels: 4, wind: 2, uv: 1 }, tomorrow: { tmin: 0, wind: 3 }, home: 45, scores: { moisture: 70 } });
   assert.equal(rt.before[0].id, "light_moist");
   assert.equal(rt.evening.length, 0);
+});
+
+test("dermatologist rules: SPF in winter, rest the barrier, oily but dehydrated", () => {
+  const dull = routine({ now: { temp: -5, feels: -8, wind: 3, uv: 0.5 }, tomorrow: { tmin: -6, wind: 4 }, home: 45, scores: { moisture: 40, redness: 50, oiliness: 45 } });
+  const spf = dull.before.find((s) => s.id === "spf");
+  assert.equal(spf.because.key, "spf_winter");
+  const ev = dull.evening.map((s) => s.id);
+  assert.deepEqual(ev, ["no_acids", "light_barrier"]);
+  assert.equal(dull.evening[0].because.key, "barrier");
+  const dry = routine({ now: { temp: -5, feels: -8, wind: 3, uv: 0.5 }, home: 45, scores: { moisture: 40, oiliness: 80 } });
+  assert.ok(dry.evening.some((s) => s.id === "rich_cream"));
 });
 
 test("week plan finds the hardest day, the night before and a mask day", () => {

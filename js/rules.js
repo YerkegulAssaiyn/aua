@@ -50,9 +50,14 @@ export function stress({ wind, feels, home, moisture }) {
   return { score, level, parts: parts.map(({ key, value }) => ({ key, value })), main: main ? main.key : null };
 }
 
-/** Today's routine. Each step: { id, because: { key, ...params } }. */
+/**
+ * Today's routine. Each step: { id, because: { key, ...params } }.
+ * Checked against a dermatologist interview (Oct 2026): SPF stays on in winter,
+ * no exfoliation when the barrier is stressed, oily skin can still be dehydrated,
+ * hot water and hot tools dry the scalp and hair.
+ */
 export function routine({ now, tomorrow, home, scores = {}, frizz = null }) {
-  const m = scores.moisture, r = scores.redness;
+  const m = scores.moisture, r = scores.redness, oil = scores.oiliness;
   const before = [], evening = [];
 
   if (m != null && m < 55) before.push({ id: "lukewarm", because: { key: "moisture", value: m } });
@@ -61,26 +66,36 @@ export function routine({ now, tomorrow, home, scores = {}, frizz = null }) {
       ? { id: "barrier", because: { key: "wind_redness", wind: now.wind, redness: r } }
       : { id: "barrier", because: { key: "wind", wind: now.wind } });
   }
+  if (!before.length) before.push({ id: "light_moist", because: { key: "mild" } });
   if (now && now.feels <= -15) before.push({ id: "lips_scarf", because: { key: "feels", feels: now.feels } });
-  if (now && now.uv != null && now.uv >= 3) before.push({ id: "spf", because: { key: "uv", uv: now.uv } });
+  before.push(now && now.uv != null && now.uv >= 3
+    ? { id: "spf", because: { key: "uv", uv: now.uv } }
+    : { id: "spf", because: { key: "spf_winter" } });
   if ((frizz != null && frizz >= 2) || (home != null && home < 30)) {
     before.push(frizz != null && frizz >= 2
       ? { id: "leave_in", because: { key: "frizz", frizz } }
       : { id: "leave_in", because: { key: "home", home } });
   }
 
+  const stressedBarrier = (m != null && m < 45) || (r != null && r < 55);
   if (tomorrow && (tomorrow.tmin <= -20 || tomorrow.wind >= 10))
     evening.push({ id: "no_acids", because: { key: "tomorrow", tmin: tomorrow.tmin } });
-  if (m != null && m < 45) evening.push({ id: "rich_cream", because: { key: "moisture", value: m } });
+  else if (stressedBarrier)
+    evening.push({ id: "no_acids", because: { key: "barrier", moisture: m ?? "–", redness: r ?? "–" } });
+  if (m != null && m < 45) {
+    evening.push(oil != null && oil < 55
+      ? { id: "light_barrier", because: { key: "oily_dry", oil, moisture: m } }
+      : { id: "rich_cream", because: { key: "moisture", value: m } });
+  }
   if (home != null && home < 40) evening.push({ id: "humidifier", because: { key: "home", home } });
+  if (frizz != null && frizz >= 2) evening.push({ id: "hair_heat", because: { key: "frizz", frizz } });
 
-  if (!before.length) before.push({ id: "light_moist", because: { key: "mild" } });
   return { before, evening };
 }
 
 /** Product tags that fit today's routine (for the shop block). */
 export function neededTags(rt) {
-  const map = { barrier: "barrier", rich_cream: "barrier", lukewarm: "gentle_cleanser", lips_scarf: "lip", leave_in: "antistatic", spf: "spf", humidifier: "humectant" };
+  const map = { barrier: "barrier", rich_cream: "barrier", light_barrier: "humectant", lukewarm: "gentle_cleanser", lips_scarf: "lip", leave_in: "antistatic", spf: "spf", humidifier: "humectant" };
   const tags = new Set();
   [...rt.before, ...rt.evening].forEach((s) => map[s.id] && tags.add(map[s.id]));
   if (tags.has("barrier")) tags.add("humectant");

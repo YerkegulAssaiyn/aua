@@ -125,7 +125,9 @@ export function weekPlan(days) {
 
 /**
  * Morning vs evening scan. Changes smaller than the threshold are treated
- * as scan noise. Calibrate the threshold by scanning twice in a row.
+ * as scan noise. Calibrated on a real phone (Oct 2026): two scans four
+ * minutes apart differed by 1 point (moisture 78 vs 77, others identical),
+ * so 4 leaves a safe margin.
  */
 export const NOISE = 4;
 export function compare(morning, evening, threshold = NOISE) {

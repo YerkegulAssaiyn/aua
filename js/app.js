@@ -329,7 +329,7 @@ function mapBlock(scan, p) {
   }
   const look = p || { skin: "#E9C3A6", hair: "#2B1E1C", sweater: "#8E83C0" };
   const i = intensities(scan?.scores);
-  const labels = scan ? { dry: [t("m_moisture"), num(scan.scores.moisture)], red: [t("m_redness"), `${num(scan.scores.redness)}, ${t("n_hint").toLowerCase()}`] } : false;
+  const labels = scan ? { dry: [t("m_moisture"), num(scan.scores.moisture)], red: [t("m_redness"), num(scan.scores.redness)] } : false;
   return `<div class="smap">${faceSVG({ ...look, ...i, labels })}</div>`;
 }
 function scatter(h) {

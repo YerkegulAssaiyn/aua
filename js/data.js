@@ -1,12 +1,12 @@
 // Demo shop and sample people. Prices and products are illustrative (demo shop).
 
 export const PRODUCTS = [
-  { id: "ceramide", name: { en: "Ceramide barrier cream", ru: "Крем с церамидами", kk: "Церамидті қорғаныш крем" }, price: 6900, tags: ["barrier"], color: "#E4E0F2", q: "крем с церамидами" },
-  { id: "glycerin", name: { en: "Glycerin serum", ru: "Сыворотка с глицерином", kk: "Глицеринді сарысу" }, price: 4500, tags: ["humectant"], color: "#FBEDDC", q: "сыворотка глицерин гиалуроновая" },
-  { id: "balm", name: { en: "Lip balm", ru: "Бальзам для губ", kk: "Ерін бальзамы" }, price: 1900, tags: ["lip"], color: "#F6E1E6", q: "бальзам для губ" },
-  { id: "leavein", name: { en: "Anti-static leave-in", ru: "Несмываемый кондиционер", kk: "Жуылмайтын кондиционер" }, price: 3800, tags: ["antistatic"], color: "#E1EEE7", q: "несмываемый кондиционер для волос" },
-  { id: "cleanser", name: { en: "Gentle cream cleanser", ru: "Мягкое кремовое умывание", kk: "Жұмсақ кремді жуғыш" }, price: 4200, tags: ["gentle_cleanser"], color: "#EEEDF3", q: "мягкое умывание для сухой кожи" },
-  { id: "spf", name: { en: "SPF 50 cream", ru: "Крем SPF 50", kk: "SPF 50 крем" }, price: 5600, tags: ["spf"], color: "#FBEDDC", q: "солнцезащитный крем spf 50" },
+  { id: "ceramide", name: { en: "Ceramide barrier cream", ru: "Крем с церамидами", kk: "Церамидтері бар қорғаныш крем" }, price: 6900, tags: ["barrier"], color: "#E4E0F2", q: "крем с церамидами" },
+  { id: "glycerin", name: { en: "Glycerin serum", ru: "Сыворотка с глицерином", kk: "Глицерин қосылған сарысу" }, price: 4500, tags: ["humectant"], color: "#FBEDDC", q: "сыворотка глицерин гиалуроновая" },
+  { id: "balm", name: { en: "Lip balm", ru: "Бальзам для губ", kk: "Ерінге арналған бальзам" }, price: 1900, tags: ["lip"], color: "#F6E1E6", q: "бальзам для губ" },
+  { id: "leavein", name: { en: "Anti-static leave-in", ru: "Несмываемый кондиционер", kk: "Шайылмайтын кондиционер" }, price: 3800, tags: ["antistatic"], color: "#E1EEE7", q: "несмываемый кондиционер для волос" },
+  { id: "cleanser", name: { en: "Gentle cream cleanser", ru: "Мягкое кремовое умывание", kk: "Жұмсақ крем тәрізді тазартқыш" }, price: 4200, tags: ["gentle_cleanser"], color: "#EEEDF3", q: "мягкое умывание для сухой кожи" },
+  { id: "spf", name: { en: "SPF 50 cream", ru: "Крем SPF 50", kk: "SPF 50 кремі" }, price: 5600, tags: ["spf"], color: "#FBEDDC", q: "солнцезащитный крем spf 50" },
 ];
 
 export const kaspiUrl = (q) => `https://kaspi.kz/shop/search/?text=${encodeURIComponent(q)}`;

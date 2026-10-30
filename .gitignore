@@ -3,3 +3,4 @@ tools/shots/
 .vercel/
 .env*
 .DS_Store
+!.env.example

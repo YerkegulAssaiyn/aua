@@ -60,7 +60,7 @@ sequenceDiagram
 | **AI Skin Analysis** (SD) | `/s2s/v2.0/task/skin-analysis` | 1 face photo, 6 concerns, mask overlays | 12 | Skin map, routine reasons, evening comparison, winter chart |
 | **Hair Frizziness Detection** | `/s2s/v2.0/task/hair-frizziness-detection` | 3 photos: front, right, left | 2 | Anti-static and hair-heat steps |
 
-YouCam error codes (too dark, face too small, out of frame, no face, pose) are mapped to plain hints in the camera. Masks are drawn over the resized image YouCam returns, so they line up exactly.
+YouCam error codes (too dark, face too small, out of frame, no face, pose) are mapped to plain hints in the camera. The app polls every second at first (a scan usually comes back in 3–5 s on a phone), and a soft limit of 5 live scans per phone per day keeps the shared API units available for everyone; after that the app switches to demo mode. A **Photo** button on the skin map shows the photo without any mask, for a before/after look. Masks are drawn over the resized image YouCam returns, so they line up exactly.
 
 ## From scores to advice
 

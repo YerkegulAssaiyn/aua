@@ -10,6 +10,8 @@ const PORT = Number(process.env.PORT) || 3000;
 const MOCK = process.argv.includes("--mock");
 const TYPES = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".ico": "image/x-icon", ".webmanifest": "application/manifest+json" };
 
+// Mock masks: a coloured oval where a face would be, so the layer buttons can be tested offline.
+const MOCK_MASK = (c) => "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 4"><ellipse cx="1.5" cy="1.8" rx=".8" ry="1.05" fill="${c}"/></svg>`);
 if (MOCK) {
   process.env.YOUCAM_API_KEY = process.env.YOUCAM_API_KEY || "mock";
   let n = 0;
@@ -33,8 +35,9 @@ if (MOCK) {
     if (u.includes("mock-upload")) return new Response("", { status: 200 });
     if (u.includes("/task/") && init.method === "POST") return reply({ data: { task_id: `T${++n}` } });
     if (u.includes("/task/skin-analysis/")) return reply({ data: { task_status: "success", results: { output: [
-      { type: "moisture", ui_score: 41 }, { type: "redness", ui_score: 63 }, { type: "oiliness", ui_score: 72 },
-      { type: "texture", ui_score: 66 }, { type: "pore", ui_score: 70 }, { type: "radiance", ui_score: 58 },
+      { type: "moisture", ui_score: 41, mask_urls: [MOCK_MASK("#7FD3F5")] }, { type: "redness", ui_score: 63, mask_urls: [MOCK_MASK("#E2405F")] },
+      { type: "oiliness", ui_score: 72, mask_urls: [MOCK_MASK("#F2C38B")] }, { type: "texture", ui_score: 66, mask_urls: [MOCK_MASK("#8E83C0")] },
+      { type: "pore", ui_score: 70, mask_urls: [MOCK_MASK("#5F9479")] }, { type: "radiance", ui_score: 58, mask_urls: [MOCK_MASK("#FFFFFF")] },
     ] } } });
     if (u.includes("/task/hair-frizziness-detection/")) return reply({ data: { task_status: "success", results: { hair_frizziness: { mapping: 2, term: "Frizzy" } } } });
     return realFetch(url, init);

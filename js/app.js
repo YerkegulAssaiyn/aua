@@ -17,6 +17,10 @@ function load() {
 function save() {
   try { localStorage.setItem(KEY, JSON.stringify(S)); } catch { /* private mode: keep in memory */ }
 }
+// Soft limit on live scans per phone per day, so the shared API units last for everyone.
+const LIVE_LIMIT = 5;
+function liveScansToday() { return S.liveScans && S.liveScans.date === today() ? S.liveScans.n : 0; }
+function countLiveScan() { S.liveScans = { date: today(), n: liveScansToday() + 1 }; save(); }
 function day() {
   if (!S.day || S.day.date !== today()) {
     const prev = S.day;
@@ -322,10 +326,10 @@ function mapBlock(scan, p) {
   // Live scan with the photo still in memory: show the user's photo with YouCam's masks.
   if (scan && !scan.demo && session.photo) {
     const layers = Object.keys(session.masks);
-    const mask = session.masks[session.mapLayer]?.[0];
+    const mask = session.mapLayer === "photo" ? null : session.masks[session.mapLayer]?.[0];
     return `<div class="photo-map"><span class="maptag"><i></i>${t("m_" + session.mapLayer)}</span><img src="${esc(session.base || session.photo)}" alt="">
       ${mask ? `<img class="mask" src="${esc(mask)}" alt="">` : ""}</div>
-      ${layers.length ? `<div class="mapbtns">${layers.map((k) => `<button data-layer="${k}" class="${k === session.mapLayer ? "on" : ""}">${t("m_" + k)}</button>`).join("")}</div>` : ""}`;
+      ${layers.length ? `<div class="mapbtns">${["photo", ...layers].map((k) => `<button data-layer="${k}" class="${k === session.mapLayer ? "on" : ""}">${t("m_" + k)}</button>`).join("")}</div>` : ""}`;
   }
   const look = p || { skin: "#E9C3A6", hair: "#2B1E1C", sweater: "#8E83C0" };
   const i = intensities(scan?.scores);
@@ -445,8 +449,9 @@ const errToast = (e) => toast(errText(e), ERR[e.code] ? 3500 : 9000);
 
 async function runTask(feature, fileIds) {
   const { task_id } = await api("/api/task", { feature, file_ids: fileIds });
-  for (let i = 0; i < 40; i++) {
-    await sleep(i < 2 ? 2000 : 2500);
+  // YouCam usually answers in 3–5 s: check every second at first, then back off.
+  for (let i = 0; i < 60; i++) {
+    await sleep(i < 10 ? 1000 : 2000);
     const r = await api(`/api/task?feature=${feature}&id=${encodeURIComponent(task_id)}`);
     if (r.status === "success") return r;
     if (r.status === "error") throw Object.assign(new Error(r.message || r.error), { code: r.error });
@@ -463,6 +468,7 @@ async function handleShot(dataUrl) {
     try {
       const { file_id } = await api("/api/upload", { image: dataUrl });
       const r = await runTask("skin-analysis", [file_id]);
+      countLiveScan();
       session.photo = dataUrl; session.base = r.base || null; session.masks = r.masks || {};
       session.mapLayer = session.masks.moisture ? "moisture" : Object.keys(session.masks)[0] || "moisture";
       const d = day(), w = session.weather || FALLBACK_WEATHER;
@@ -524,6 +530,7 @@ function startScan(mode) {
     return;
   }
   if (!session.live) { toast(t("err_nokey")); go("demo"); return; }
+  if (liveScansToday() >= LIVE_LIMIT) { toast(t("err_limit", { n: LIVE_LIMIT }), 6000); go("demo"); return; }
   go("camera");
 }
 

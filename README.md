@@ -10,7 +10,7 @@
 
 In January, Astana can be **−27 °C** outside. Central heating warms that same air to +24 °C, and its relative humidity drops to **about 2%**. Indoor comfort is usually quoted at 40–60%. Skin goes through that swing twice a day, all winter.
 
-A dermatologist we interviewed:
+Dr. Karina Batyrkhanovna, the dermatologist we interviewed:
 
 > “Complaints rise noticeably exactly when the central heating is switched on.”
 >
@@ -115,6 +115,9 @@ test/                      node:test
 
 ## Team
 
-Built in Astana by a data engineer and a medical student.
+- **Yerkegul Assaiyn**, data engineer, Astana
+- **Yerkezhan Suleimen**, medical student, Semey Medical University
+
+With thanks to Dr. Karina Batyrkhanovna, dermatologist, for the interview behind our care rules.
 
 MIT License.

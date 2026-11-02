@@ -2,7 +2,7 @@
 
 **A morning skin check for cold winters, built and tested in Astana.** YouCam Skin AI reads your skin; Aua adds today's frost and the dry air in your heated home, and turns it all into a routine where every step says *why*.
 
-**[▶ Try the live app](https://aua-five.vercel.app)** · Demo video: *coming soon* · Built for the [YouCam API Skin AI & eCommerce VTO Hackathon](https://youcam-api-skin-ai-ecommerce.devpost.com/) (Skin AI track)
+**[▶ Try the live app](https://aua-five.vercel.app)** · [▶ Demo video](https://youtu.be/LqB4kbD-444) · Built for the [YouCam API Skin AI & eCommerce VTO Hackathon](https://youcam-api-skin-ai-ecommerce.devpost.com/) (Skin AI track)
 
 ![Aua screens: welcome, skin map, today, routine, evening check](docs/hero.png)
 
